@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    primary:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/testdb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: asdasdasd
+      driver-class-name: com.mysql.jdbc.Driver
+    secondary:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/testdb2?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: asdasdasd
+      driver-class-name: com.mysql.jdbc.Driver

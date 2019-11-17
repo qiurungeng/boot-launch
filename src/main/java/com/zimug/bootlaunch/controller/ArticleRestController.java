@@ -36,7 +36,7 @@ public class ArticleRestController {
     @DeleteMapping("/article/{id}")
     public @ResponseBody AjaxResponse deleteArticle(@PathVariable Long id) {
 
-        log.info("deleteArticle：{}",id);
+        articleRestService.deleteArticle(id);
 
         return AjaxResponse.success(id);
     }
@@ -46,7 +46,7 @@ public class ArticleRestController {
     public @ResponseBody AjaxResponse updateArticle(@PathVariable Long id, @RequestBody Article article) {
         article.setId(id);
 
-        log.info("updateArticle：{}",article);
+        articleRestService.updateArticle(article);
 
         return AjaxResponse.success(article);
     }
@@ -55,7 +55,12 @@ public class ArticleRestController {
     @GetMapping( "/article/{id}")
     public @ResponseBody  AjaxResponse getArticle(@PathVariable Long id) {
 
-        Article article1 = Article.builder().id(1L).author("zimug").content("spring boot 2.深入浅出").title("t1").build();
-        return AjaxResponse.success(article1);
+        return AjaxResponse.success(articleRestService.getArticle(id));
+    }
+
+    @GetMapping( "/article")
+    public @ResponseBody  AjaxResponse getAllArticle() {
+
+        return AjaxResponse.success(articleRestService.getAll());
     }
 }

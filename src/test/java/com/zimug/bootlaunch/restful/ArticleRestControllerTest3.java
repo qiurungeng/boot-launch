@@ -57,7 +57,7 @@ public class ArticleRestControllerTest3 {
         Article articleObj = objectMapper.readValue(article,Article.class);
 
         //打桩
-        when(articleRestService.saveArticle(articleObj)).thenReturn("ok");
+        when(articleRestService.saveArticle(articleObj)).thenReturn(articleObj);
 
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.request(HttpMethod.POST, "/rest/article")
