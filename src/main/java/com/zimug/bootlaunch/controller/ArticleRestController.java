@@ -1,8 +1,8 @@
 package com.zimug.bootlaunch.controller;
 
 import com.zimug.bootlaunch.model.AjaxResponse;
-import com.zimug.bootlaunch.model.Article;
-import com.zimug.bootlaunch.service.ArticleRestService;
+import com.zimug.bootlaunch.model.ArticleVO;
+import com.zimug.bootlaunch.service.ArticleRestJPAServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +16,18 @@ import javax.annotation.Resource;
 public class ArticleRestController {
 
     @Resource
-    ArticleRestService articleRestService;
+    ArticleRestJPAServiceImpl articleRestJPAServiceImpl;
 
  
     //@RequestMapping(value = "/article", method = POST, produces = "application/json")
     @PostMapping("/article")
-    public @ResponseBody  AjaxResponse saveArticle(@RequestBody Article article) {
+    public @ResponseBody  AjaxResponse saveArticle(@RequestBody ArticleVO article) {
     /*public @ResponseBody  AjaxResponse saveArticle(@RequestParam String  id,
                                                    @RequestParam String  author) {*/
 
         log.info("saveArticle：{}",article);
 
-        log.info("articleRestService return :" + articleRestService.saveArticle(article));
+        log.info("articleRestService return :" + articleRestJPAServiceImpl.saveArticle(article));
 
         return  AjaxResponse.success(article);
     }
@@ -36,26 +36,27 @@ public class ArticleRestController {
     @DeleteMapping("/article/{id}")
     public @ResponseBody AjaxResponse deleteArticle(@PathVariable Long id) {
 
-        log.info("deleteArticle：{}",id);
-
+        articleRestJPAServiceImpl.deleteArticle(id);
         return AjaxResponse.success(id);
     }
  
     //@RequestMapping(value = "/article/{id}", method = PUT, produces = "application/json")
     @PutMapping("/article/{id}")
-    public @ResponseBody AjaxResponse updateArticle(@PathVariable Long id, @RequestBody Article article) {
+    public @ResponseBody AjaxResponse updateArticle(@PathVariable Long id, @RequestBody ArticleVO article) {
         article.setId(id);
 
-        log.info("updateArticle：{}",article);
-
+        articleRestJPAServiceImpl.updateArticle(article);
         return AjaxResponse.success(article);
     }
  
     //@RequestMapping(value = "/article/{id}", method = GET, produces = "application/json")
     @GetMapping( "/article/{id}")
     public @ResponseBody  AjaxResponse getArticle(@PathVariable Long id) {
+        return AjaxResponse.success(articleRestJPAServiceImpl.getArticle(id));
+    }
 
-        Article article1 = Article.builder().id(1L).author("zimug").content("spring boot 2.深入浅出").title("t1").build();
-        return AjaxResponse.success(article1);
+    @GetMapping( "/article")
+    public @ResponseBody  AjaxResponse getAll() {
+        return AjaxResponse.success(articleRestJPAServiceImpl.getAll());
     }
 }

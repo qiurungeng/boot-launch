@@ -1,10 +1,15 @@
 package com.zimug.bootlaunch.restful;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zimug.bootlaunch.controller.ArticleRestController;
+import com.zimug.bootlaunch.model.ArticleVO;
+import com.zimug.bootlaunch.service.ArticleRestJPAServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,17 +19,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.annotation.Resource;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 //@Transactional
 @Slf4j
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@SpringBootTest
-public class ArticleRestControllerTest2 {
+@WebMvcTest(ArticleRestController.class)
+public class ArticleVORestControllerTest3 {
 
     @Resource
     private MockMvc mockMvc;
+
+    @MockBean   //伪造service
+            ArticleRestJPAServiceImpl articleRestJPAServiceImpl;
 
     /*@Before
     public void setUp() {
@@ -33,7 +42,6 @@ public class ArticleRestControllerTest2 {
 
     @Test
     public void saveArticle() throws Exception {
-
         String article = "{\n" +
                 "    \"id\": 1,\n" +
                 "    \"author\": \"zimug\",\n" +
@@ -42,6 +50,15 @@ public class ArticleRestControllerTest2 {
                 "    \"createTime\": \"2017-07-16 05:23:34\",\n" +
                 "    \"reader\":[{\"name\":\"zimug\",\"age\":18},{\"name\":\"kobe\",\"age\":37}]\n" +
                 "}";
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArticleVO articleObj = objectMapper.readValue(article, ArticleVO.class);
+
+        //打桩
+        when(articleRestJPAServiceImpl.saveArticle(articleObj)).thenReturn(articleObj);
+
+
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.request(HttpMethod.POST, "/rest/article")
                 .contentType("application/json").content(article))
                 .andExpect(MockMvcResultMatchers.status().isOk())
