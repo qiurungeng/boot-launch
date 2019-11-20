@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
-public class ArticleRestControllerTest2 {
+public class ArticleVORestControllerTest2 {
 
     @Resource
     private MockMvc mockMvc;

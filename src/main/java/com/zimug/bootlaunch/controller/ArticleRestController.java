@@ -1,8 +1,8 @@
 package com.zimug.bootlaunch.controller;
 
 import com.zimug.bootlaunch.model.AjaxResponse;
-import com.zimug.bootlaunch.model.Article;
-import com.zimug.bootlaunch.service.ArticleRestService;
+import com.zimug.bootlaunch.model.ArticleVO;
+import com.zimug.bootlaunch.service.ArticleMybatisRestServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,18 +16,16 @@ import javax.annotation.Resource;
 public class ArticleRestController {
 
     @Resource
-    ArticleRestService articleRestService;
+    ArticleMybatisRestServiceImpl articleMybatisRestServiceImpl;
 
  
     //@RequestMapping(value = "/article", method = POST, produces = "application/json")
     @PostMapping("/article")
-    public @ResponseBody  AjaxResponse saveArticle(@RequestBody Article article) {
+    public @ResponseBody  AjaxResponse saveArticle(@RequestBody ArticleVO article) {
     /*public @ResponseBody  AjaxResponse saveArticle(@RequestParam String  id,
                                                    @RequestParam String  author) {*/
 
-        log.info("saveArticle：{}",article);
-
-        log.info("articleRestService return :" + articleRestService.saveArticle(article));
+        articleMybatisRestServiceImpl.saveArticle(article);
 
         return  AjaxResponse.success(article);
     }
@@ -36,17 +34,17 @@ public class ArticleRestController {
     @DeleteMapping("/article/{id}")
     public @ResponseBody AjaxResponse deleteArticle(@PathVariable Long id) {
 
-        log.info("deleteArticle：{}",id);
+        articleMybatisRestServiceImpl.deleteArticle(id);
 
         return AjaxResponse.success(id);
     }
  
     //@RequestMapping(value = "/article/{id}", method = PUT, produces = "application/json")
     @PutMapping("/article/{id}")
-    public @ResponseBody AjaxResponse updateArticle(@PathVariable Long id, @RequestBody Article article) {
+    public @ResponseBody AjaxResponse updateArticle(@PathVariable Long id, @RequestBody ArticleVO article) {
         article.setId(id);
 
-        log.info("updateArticle：{}",article);
+        articleMybatisRestServiceImpl.updateArticle(article);
 
         return AjaxResponse.success(article);
     }
@@ -55,7 +53,12 @@ public class ArticleRestController {
     @GetMapping( "/article/{id}")
     public @ResponseBody  AjaxResponse getArticle(@PathVariable Long id) {
 
-        Article article1 = Article.builder().id(1L).author("zimug").content("spring boot 2.深入浅出").title("t1").build();
-        return AjaxResponse.success(article1);
+
+        return AjaxResponse.success(articleMybatisRestServiceImpl.getArticle(id));
+    }
+
+    @GetMapping( "/article")
+    public @ResponseBody  AjaxResponse getAll() {
+        return AjaxResponse.success(articleMybatisRestServiceImpl.getAll());
     }
 }
